@@ -19,7 +19,10 @@ public class PlayerController : MonoBehaviour
 
     private bool isFiring = false;
 
+    string bulletType = "bulletOrange";
+
     //TODO: create a reference to the BulletPoolManager here
+    //Manager now singleton
 
     // Start is called before the first frame update
     void Start()
@@ -88,6 +91,15 @@ public class PlayerController : MonoBehaviour
         {
             isFiring = false;
         }
+
+        if (Input.GetKeyUp(KeyCode.Alpha1))
+        {
+            bulletType = "bulletOrange";
+        }
+        if (Input.GetKeyUp(KeyCode.Alpha2))
+        {
+            bulletType = "bulletGreen";
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -119,7 +131,10 @@ public class PlayerController : MonoBehaviour
                 //TODO: GetBullet function which will return a reference to a 
                 //TODO: bullet object. 
                 //TODO: Ensure you position the new bullet at the bulletSpawn position
-                Instantiate(bullet, bulletSpawn.position, Quaternion.identity);
+                GameObject bullet = BulletPoolManager.GetInstance().GetBullet(bulletType);
+                bullet.SetActive(true);
+
+                bullet.transform.position = bulletSpawn.position;
             }
 
         }

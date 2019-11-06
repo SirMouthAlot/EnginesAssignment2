@@ -106,7 +106,7 @@ MonoBehaviour:
     Left: -2.86
   gameController: {fileID: 0}
   bulletSpawn: {fileID: 6513763217427438196}
-  bullet: {fileID: 0}
+  bullet: {fileID: 7008785284576285171, guid: bb06c5ba2d15c2647b82760f50c866d5, type: 3}
 --- !u!50 &4120750921962999631
 Rigidbody2D:
   serializedVersion: 4
