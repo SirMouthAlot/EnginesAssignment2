@@ -134,6 +134,8 @@ public class PlayerController : MonoBehaviour
                 GameObject bullet = BulletPoolManager.GetInstance().GetBullet(bulletType);
                 bullet.SetActive(true);
 
+                bullet.GetComponent<BulletController>().bulletType = bulletType;
+
                 bullet.transform.position = bulletSpawn.position;
             }
 

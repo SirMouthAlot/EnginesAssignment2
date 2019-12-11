@@ -11,24 +11,32 @@ namespace Util
         //Singleton instance for bulletpoolmanager
         private static BulletPoolManager m_instance;
 
+        static public List<string> m_bulletTypes = new List<string>();
+
         //TODO: create a structure to contain a collection of bullets
         public static int max_bullets = 50;
-        List<GameObject> bulletPool = new List<GameObject>(max_bullets);
-
+        Dictionary<string, List<GameObject>> bulletPool = new Dictionary<string, List<GameObject>>();
 
         private BulletPoolManager()
         {
-            GameObject bullet = Resources.Load("Bullet", typeof(GameObject)) as GameObject;
-
-            for (int i = 0; i < max_bullets; i++)
+            for (int i = 0; i < m_bulletTypes.Count; i++)
             {
-                
-                //instantiate bullet at (0, 0, 0) and deactiveate it so that you can't see it
-                GameObject instBullet = MonoBehaviour.Instantiate(bullet, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-                instBullet.SetActive(false);
+                GameObject bullet = Resources.Load(m_bulletTypes[i], typeof(GameObject)) as GameObject;
 
-                //Add our deactivated instantiated bullet to our pool
-                bulletPool.Add(instBullet);
+                List<GameObject> myPool = new List<GameObject>();
+
+                for (int j = 0; j < max_bullets; j++)
+                {
+
+                    //instantiate bullet at (0, 0, 0) and deactiveate it so that you can't see it
+                    GameObject instBullet = MonoBehaviour.Instantiate(bullet, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+                    instBullet.SetActive(false);
+
+                    //Add our deactivated instantiated bullet to our pool
+                    myPool.Add(instBullet);
+                }
+
+                bulletPool.Add(m_bulletTypes[i], myPool);
             }
         }
 
@@ -46,20 +54,22 @@ namespace Util
         //TODO: modify this function to return a bullet from the Pool
         public GameObject GetBullet(string name = "bulletOrange")
         {
-            GameObject _bullet = bulletPool[bulletPool.Count - 1];
-            SpriteRenderer renderer = _bullet.GetComponent<SpriteRenderer>();
-            renderer.sprite = Resources.Load(name, typeof(Sprite)) as Sprite;
+            List<GameObject> _bulletList = bulletPool[name];
 
-            bulletPool.RemoveAt(bulletPool.Count - 1);
+            GameObject _bullet = _bulletList[_bulletList.Count - 1];
+            // SpriteRenderer renderer = _bullet.GetComponent<SpriteRenderer>();
+            // renderer.sprite = Resources.Load(name, typeof(Sprite)) as Sprite;
+
+            _bulletList.RemoveAt(_bulletList.Count - 1);
 
             return _bullet;
         }
 
         //TODO: modify this function to reset/return a bullet back to the Pool 
-        public void ResetBullet(GameObject _bullet)
+        public void ResetBullet(string pool, GameObject _bullet)
         {
             //Adds the bullet back to the pool
-            bulletPool.Insert(bulletPool.Count, _bullet);
+            bulletPool[pool].Insert(bulletPool.Count, _bullet);
 
             //Moves it back to (0, 0, 0) with the rest of the pool
             //Deactivates it

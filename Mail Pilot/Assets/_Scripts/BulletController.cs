@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Util;
+using System;
 
 public class BulletController : MonoBehaviour
 {
     public float bulletSpeed = 0.1f;
     public Boundary boundary;
+
+    public string bulletType;
 
     //TODO: create a reference to the BulletPoolManager
     //BulletPool manager now singleton
@@ -35,7 +38,7 @@ public class BulletController : MonoBehaviour
         {
             //TODO: This code needs to change to use the BulletPoolManager's
             //TODO: ResetBullet function which will return the bullet to the pool
-            BulletPoolManager.GetInstance().ResetBullet(this.gameObject);
+            BulletPoolManager.GetInstance().ResetBullet(bulletType, this.gameObject);
         }
     }
 }
